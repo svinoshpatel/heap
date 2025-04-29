@@ -90,4 +90,70 @@ function heap.HeapSort(A, ascending)
     A.heap_size = #A
 end
 
+-- MaxHeap пріоритетна черга
+function heap.HeapMaximum(A)
+    return A[1]
+end
+
+function heap.HeapExtractMax(A)
+    if A.heap_size < 1 then
+        error("Черга порожня")
+    end
+    local max = A[1]
+    A[1] = A[A.heap_size]
+    A.heap_size = A.heap_size - 1
+    heap.MaxHeapify(A, 1)
+    return max
+end
+
+function heap.HeapIncreaseKey(A, i, key)
+    if key < A[i] then
+        error("Новий ключ менший за поточний")
+    end
+    A[i] = key
+    while i > 1 and A[heap.Parent(i)] < A[i] do
+        A[i], A[heap.Parent(i)] = A[heap.Parent(i)], A[i]
+        i = heap.Parent(i)
+    end
+end
+
+function heap.MaxHeapInsert(A, key)
+    A.heap_size = A.heap_size + 1
+    A[A.heap_size] = -math.huge
+    heap.HeapIncreaseKey(A, A.heap_size, key)
+end
+
+function heap.HeapMinimum(A)
+    return A[1]
+end
+
+function heap.HeapExtractMin(A)
+    if A.heap_size < 1 then
+        error("Черга порожня")
+    end
+    local min = A[1]
+    A[1] = A[A.heap_size]
+    A.heap_size = A.heap_size - 1
+    heap.MinHeapify(A, 1)
+    return min
+end
+
+function heap.HeapDecreaseKey(A, i, key)
+    if key > A[i] then
+        error("Новий ключ більший за поточний")
+    end
+    A[i] = key
+    while i > 1 and A[heap.Parent(i)] > A[i] do
+        A[i], A[heap.Parent(i)] = A[heap.Parent(i)], A[i]
+        i = heap.Parent(i)
+    end
+end
+
+function heap.MinHeapInsert(A, key)
+    A.heap_size = A.heap_size + 1
+    A[A.heap_size] = math.huge
+    heap.HeapDecreaseKey(A, A.heap_size, key)
+end
+
+
 return heap
